@@ -1,0 +1,50 @@
+name: Autograding Tests
+'on':
+- workflow_dispatch
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Validate HTML
+      id: validate-html
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Validate HTML
+        setup-command: npm install
+        command: npm test validateHTML.test.js
+        timeout: 10
+        max-score: 2
+    - name: Validate CSS
+      id: validate-css
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Validate CSS
+        setup-command: npm install
+        command: npm test validateCSS.test.js
+        timeout: 10
+        max-score: 2
+    - name: Validate JavaScript
+      id: validate-javascript
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Validate JavaScript
+        setup-command: npm install
+        command: npm test validateJS.test.js
+        timeout: 10
+        max-score: 3
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        VALIDATE-HTML_RESULTS: "${{steps.validate-html.outputs.result}}"
+        VALIDATE-CSS_RESULTS: "${{steps.validate-css.outputs.result}}"
+        VALIDATE-JAVASCRIPT_RESULTS: "${{steps.validate-javascript.outputs.result}}"
+      with:
+        runners: validate-html,validate-css,validate-javascript
