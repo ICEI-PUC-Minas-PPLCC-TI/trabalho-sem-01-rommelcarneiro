@@ -1,6 +1,6 @@
 {
     "html": {
-      "requiredTags": ["header", "footer", "nav"],
+      "requiredTags": ["header", "footer", "nav", "article"],
       "forbiddenTags": ["blink", "marquee"]
     },
     "css": {
