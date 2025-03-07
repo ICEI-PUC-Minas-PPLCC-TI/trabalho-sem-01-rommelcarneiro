@@ -11,6 +11,7 @@ function validateHTML(html, rules) {
         else results.passed.push(`Tag proibida <${tag}> não encontrada.`);
     });
 
+    results.valid = true;
     return results;
 }
 
